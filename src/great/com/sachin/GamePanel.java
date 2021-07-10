@@ -13,6 +13,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     private volatile boolean gameOver = false; // for game termination
 
+    private Graphics dbg;
+    private Image dbImage = null;
+
     public GamePanel(){
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(PWIDTH,PHEIGHT));
@@ -63,4 +66,37 @@ public class GamePanel extends JPanel implements Runnable {
             //update game state
         }
     }
+    private void gameRender(){
+        if(dbImage == null){
+            dbImage = createImage(PWIDTH,PHEIGHT);
+            if(dbImage == null){
+                System.out.println("dbImage is full");
+                return;
+            }else{
+                dbg = dbImage.getGraphics();
+            }
+            //clear the background
+            dbg.setColor(Color.WHITE);
+            dbg.fillRect(0,0,PWIDTH,PHEIGHT);
+
+            //draw game elements
+
+            if(gameOver){
+                gameOverMessage(dbg);
+            }
+        }
+    }
+    private void gameOverMessage(Graphics g){
+        //game over message
+        //calculate x and y here...
+        g.drawString(msg,x,y);
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        if(dbImage !=null){
+            g.drawImage(dbImage,0,0,null);
+        }
+    }
+
 }
